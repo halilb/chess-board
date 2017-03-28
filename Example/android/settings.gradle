@@ -1,0 +1,3 @@
+rootProject.name = 'ChessBoard'
+
+include ':app'

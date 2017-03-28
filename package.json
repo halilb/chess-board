@@ -1,0 +1,27 @@
+{
+  "name": "react-native-chess-board",
+  "version": "0.0.1",
+  "description": "Chess board component for react native",
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "react-component",
+    "react-native",
+    "chess",
+    "board",
+    "chess board",
+    "ios",
+    "android"
+  ],
+  "main": "lib/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/halilb/react-native-chess-board.git"
+  },
+  "bugs": {
+    "url": "https://github.com/halilb/react-native-chess-board/issues"
+  },
+  "author": "Halil Bilir <hbilir@gmail.com>",
+  "homepage": "https://github.com/halilb/react-native-chess-board#readme"
+}
