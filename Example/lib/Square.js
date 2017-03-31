@@ -14,6 +14,8 @@ export default class Board extends Component {
     return (
       <View
         style={{
+          justifyContent: 'center',
+          alignItems: 'center',
           backgroundColor: black ? '#F0D9B5' : '#B58863',
           width: size,
           height: size,

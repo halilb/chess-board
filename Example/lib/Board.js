@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import { Chess } from 'chess.js';
 
 import Square from './Square';
+import Piece from './Piece';
 
 export default class Board extends Component {
   static propTypes = {
@@ -20,7 +21,7 @@ export default class Board extends Component {
         size={pieceSize}
         black={(rowIndex + pieceIndex) % 2 === 0}
       >
-        <Text>{`${rowIndex}-${pieceIndex}`}</Text>
+        {piece ? <Piece type={piece.type} color={piece.color} /> : null}
       </Square>
     ));
 
