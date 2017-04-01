@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { Chess } from 'chess.js';
 
-import Board from './lib/Board';
+import Board from '../lib/Board';
 
 export default class ChessBoardExample extends Component {
   constructor(props) {

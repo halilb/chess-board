@@ -1,4 +1,4 @@
 import { AppRegistry } from 'react-native';
-import ChessBoardExample from './ChessBoardExample';
+import ExampleList from './ExampleList';
 
-AppRegistry.registerComponent('ChessBoard', () => ChessBoardExample);
+AppRegistry.registerComponent('ChessBoard', () => ExampleList);
