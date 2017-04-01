@@ -6,40 +6,55 @@ import { Chess } from 'chess.js';
 import Square from './Square';
 import Piece from './Piece';
 
+const DIMENSION = 8;
+
 export default class Board extends Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
     fen: PropTypes.string,
+    showNotation: PropTypes.bool,
   };
 
-  renderRow = (row, rowIndex) => {
-    const { size } = this.props;
-    const pieceSize = size / 8;
-    const pieces = row.map((piece, pieceIndex) => (
-      <Square
-        key={`square_${pieceIndex}`}
-        size={pieceSize}
-        black={(rowIndex + pieceIndex) % 2 === 0}
-      >
-        {piece ? <Piece type={piece.type} color={piece.color} /> : null}
-      </Square>
-    ));
-
-    return (
-      <View key={`row_${rowIndex}`} style={styles.row}>
-        {pieces}
-      </View>
-    );
+  static defaultProps = {
+    showNotation: true,
   };
+
+  renderSquares() {
+    const { size, showNotation } = this.props;
+    const squareSize = size / DIMENSION;
+    const rows = [];
+
+    for (let rowIndex = 0; rowIndex < DIMENSION; rowIndex++) {
+      const squares = [];
+
+      for (let squareIndex = 0; squareIndex < DIMENSION; squareIndex++) {
+        const square = (
+          <Square
+            key={`square_${rowIndex}_${squareIndex}`}
+            size={squareSize}
+            showNotation={showNotation}
+            rowIndex={rowIndex}
+            squareIndex={squareIndex}
+            dimension={DIMENSION}
+          />
+        );
+        squares.push(square);
+      }
+
+      rows.push(
+        <View key={`row_${rowIndex}`} style={styles.row}>
+          {squares}
+        </View>
+      );
+    }
+
+    return rows;
+  }
 
   render() {
-    const { fen } = this.props;
-    const game = new Chess(fen);
-    const board = game.board();
-
     return (
       <View style={styles.container}>
-        {board.map(this.renderRow)}
+        {this.renderSquares()}
       </View>
     );
   }
