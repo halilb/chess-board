@@ -45,7 +45,7 @@ export default class ChessBoardExample extends Component {
 
     return (
       <View style={styles.container}>
-        <Board fen={fen} size={360} />
+        <Board fen={fen} size={340} />
       </View>
     );
   }

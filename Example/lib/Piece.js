@@ -32,17 +32,23 @@ export default class Piece extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
+    rowIndex: PropTypes.number.isRequired,
+    columnIndex: PropTypes.number.isRequired,
+    pieceSize: PropTypes.number.isRequired,
   };
 
   render() {
-    const { type, color } = this.props;
+    const { type, color, rowIndex, columnIndex, pieceSize } = this.props;
     const pieceImageSource = PIECE_IMAGES[type][color];
 
     return (
       <Image
         style={{
-          width: 40,
-          height: 40,
+          position: 'absolute',
+          top: pieceSize * rowIndex,
+          left: pieceSize * columnIndex,
+          width: pieceSize,
+          height: pieceSize,
         }}
         source={pieceImageSource}
       />

@@ -8,16 +8,16 @@ export default class Board extends Component {
     size: PropTypes.number.isRequired,
     showNotation: PropTypes.bool,
     rowIndex: PropTypes.number.isRequired,
-    squareIndex: PropTypes.number.isRequired,
+    columnIndex: PropTypes.number.isRequired,
     dimension: PropTypes.number.isRequired,
   };
 
   renderNotations(isBlack) {
-    const { showNotation, rowIndex, squareIndex, dimension } = this.props;
+    const { showNotation, rowIndex, columnIndex, dimension } = this.props;
     const notations = [];
 
     if (showNotation) {
-      if (squareIndex + 1 === dimension) {
+      if (columnIndex + 1 === dimension) {
         notations.push(
           <Text
             key={'row_notations'}
@@ -48,7 +48,7 @@ export default class Board extends Component {
               },
             ]}
           >
-            {COLUMN_NAMES[squareIndex]}
+            {COLUMN_NAMES[columnIndex]}
           </Text>
         );
       }
@@ -58,8 +58,8 @@ export default class Board extends Component {
   }
 
   render() {
-    const { size, rowIndex, squareIndex } = this.props;
-    const isBlack = (rowIndex + squareIndex) % 2 === 0;
+    const { size, rowIndex, columnIndex } = this.props;
+    const isBlack = (rowIndex + columnIndex) % 2 === 0;
 
     return (
       <View

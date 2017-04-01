@@ -27,14 +27,14 @@ export default class Board extends Component {
     for (let rowIndex = 0; rowIndex < DIMENSION; rowIndex++) {
       const squares = [];
 
-      for (let squareIndex = 0; squareIndex < DIMENSION; squareIndex++) {
+      for (let columnIndex = 0; columnIndex < DIMENSION; columnIndex++) {
         const square = (
           <Square
-            key={`square_${rowIndex}_${squareIndex}`}
+            key={`square_${rowIndex}_${columnIndex}`}
             size={squareSize}
             showNotation={showNotation}
             rowIndex={rowIndex}
-            squareIndex={squareIndex}
+            columnIndex={columnIndex}
             dimension={DIMENSION}
           />
         );
@@ -51,10 +51,34 @@ export default class Board extends Component {
     return rows;
   }
 
+  renderPieces(board) {
+    return board.map((row, rowIndex) => {
+      return row.map((piece, columnIndex) => {
+        if (piece) {
+          return (
+            <Piece
+              type={piece.type}
+              color={piece.color}
+              rowIndex={rowIndex}
+              columnIndex={columnIndex}
+              pieceSize={this.props.size / DIMENSION}
+            />
+          );
+        }
+        return null;
+      });
+    });
+  }
+
   render() {
+    const { fen } = this.props;
+    const game = new Chess(fen);
+    const board = game.board();
+
     return (
       <View style={styles.container}>
         {this.renderSquares()}
+        {this.renderPieces(board)}
       </View>
     );
   }
@@ -64,7 +88,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
   },
   row: {
     flexDirection: 'row',
