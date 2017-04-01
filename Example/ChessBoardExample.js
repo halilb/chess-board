@@ -9,12 +9,36 @@ export default class ChessBoardExample extends Component {
   constructor(props) {
     super(props);
 
-    const game = new Chess();
-
     this.state = {
-      fen: game.fen(),
+      game: new Chess(),
     };
   }
+
+  componentDidMount() {
+    setTimeout(this.makeRandomMove, 500);
+  }
+
+  makeRandomMove = () => {
+    const { game } = this.state;
+    const possibleMoves = game.moves();
+
+    // exit if the game is over
+    if (
+      game.game_over() === true ||
+      game.in_draw() === true ||
+      possibleMoves.length === 0
+    ) {
+      return;
+    }
+
+    const randomIndex = Math.floor(Math.random() * possibleMoves.length);
+    game.move(possibleMoves[randomIndex]);
+    this.setState({
+      fen: game.fen(),
+    });
+
+    setTimeout(this.makeRandomMove, 500);
+  };
 
   render() {
     const { fen } = this.state;
