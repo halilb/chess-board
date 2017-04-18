@@ -19,8 +19,32 @@ export default class Board extends Component {
     showNotation: true,
   };
 
+  constructor(props) {
+    super(props);
+
+    const game = new Chess(props.fen);
+    this.state = {
+      game,
+      board: game.board(),
+      highlightRow: -1,
+      highlightColumn: -1,
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const nextFen = nextProps.fen;
+    if (this.props.fen !== nextFen) {
+      const game = new Chess(nextFen);
+      this.setState({
+        game,
+        board: game.board(),
+      });
+    }
+  }
+
   renderSquares() {
     const { size, showNotation } = this.props;
+    const { highlightRow, highlightColumn } = this.state;
     const squareSize = size / DIMENSION;
     const rows = [];
 
@@ -36,6 +60,9 @@ export default class Board extends Component {
             rowIndex={rowIndex}
             columnIndex={columnIndex}
             dimension={DIMENSION}
+            highlighted={
+              rowIndex === highlightRow && columnIndex === highlightColumn
+            }
           />
         );
         squares.push(square);
@@ -62,6 +89,12 @@ export default class Board extends Component {
               rowIndex={rowIndex}
               columnIndex={columnIndex}
               pieceSize={this.props.size / DIMENSION}
+              onSelected={() => {
+                this.setState({
+                  highlightRow: rowIndex,
+                  highlightColumn: columnIndex,
+                });
+              }}
             />
           );
         }
@@ -71,9 +104,7 @@ export default class Board extends Component {
   }
 
   render() {
-    const { fen } = this.props;
-    const game = new Chess(fen);
-    const board = game.board();
+    const { board } = this.state;
 
     return (
       <View style={styles.container}>

@@ -5,17 +5,13 @@ import { Chess } from 'chess.js';
 
 import Board from '../lib/Board';
 
-export default class RandomVsRandom extends Component {
+export default class PlayerVsRandom extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       game: new Chess(),
     };
-  }
-
-  componentDidMount() {
-    setTimeout(this.makeRandomMove, 500);
   }
 
   makeRandomMove = () => {

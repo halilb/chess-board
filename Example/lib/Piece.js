@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Image } from 'react-native';
+import { TouchableWithoutFeedback, Image } from 'react-native';
 
 const PIECE_IMAGES = {
   b: {
@@ -35,23 +35,33 @@ export default class Piece extends Component {
     rowIndex: PropTypes.number.isRequired,
     columnIndex: PropTypes.number.isRequired,
     pieceSize: PropTypes.number.isRequired,
+    onSelected: PropTypes.func,
   };
 
   render() {
-    const { type, color, rowIndex, columnIndex, pieceSize } = this.props;
+    const {
+      type,
+      color,
+      rowIndex,
+      columnIndex,
+      pieceSize,
+      onSelected,
+    } = this.props;
     const pieceImageSource = PIECE_IMAGES[type][color];
 
     return (
-      <Image
-        style={{
-          position: 'absolute',
-          top: pieceSize * rowIndex,
-          left: pieceSize * columnIndex,
-          width: pieceSize,
-          height: pieceSize,
-        }}
-        source={pieceImageSource}
-      />
+      <TouchableWithoutFeedback onPress={onSelected}>
+        <Image
+          style={{
+            position: 'absolute',
+            top: pieceSize * rowIndex,
+            left: pieceSize * columnIndex,
+            width: pieceSize,
+            height: pieceSize,
+          }}
+          source={pieceImageSource}
+        />
+      </TouchableWithoutFeedback>
     );
   }
 }

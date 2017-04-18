@@ -10,10 +10,16 @@ export default class Board extends Component {
     rowIndex: PropTypes.number.isRequired,
     columnIndex: PropTypes.number.isRequired,
     dimension: PropTypes.number.isRequired,
+    highlighted: PropTypes.bool,
   };
 
   renderNotations(isBlack) {
-    const { showNotation, rowIndex, columnIndex, dimension } = this.props;
+    const {
+      showNotation,
+      rowIndex,
+      columnIndex,
+      dimension,
+    } = this.props;
     const notations = [];
 
     if (showNotation) {
@@ -58,13 +64,18 @@ export default class Board extends Component {
   }
 
   render() {
-    const { size, rowIndex, columnIndex } = this.props;
+    const { size, rowIndex, columnIndex, highlighted } = this.props;
     const isBlack = (rowIndex + columnIndex) % 2 === 0;
+    let backgroundColor = isBlack ? '#F0D9B5' : '#B58863';
+
+    if (highlighted) {
+      backgroundColor = '#656E41';
+    }
 
     return (
       <View
         style={{
-          backgroundColor: isBlack ? '#F0D9B5' : '#B58863',
+          backgroundColor,
           width: size,
           height: size,
         }}
