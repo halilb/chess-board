@@ -8,8 +8,9 @@ import Piece from './Piece';
 
 const DIMENSION = 8;
 
-export default class Board extends Component {
+export default class BoardView extends Component {
   static propTypes = {
+    actions: PropTypes.object.isRequired,
     size: PropTypes.number.isRequired,
     fen: PropTypes.string,
     showNotation: PropTypes.bool,
@@ -71,7 +72,7 @@ export default class Board extends Component {
       rows.push(
         <View key={`row_${rowIndex}`} style={styles.row}>
           {squares}
-        </View>
+        </View>,
       );
     }
 
@@ -89,12 +90,7 @@ export default class Board extends Component {
               rowIndex={rowIndex}
               columnIndex={columnIndex}
               pieceSize={this.props.size / DIMENSION}
-              onSelected={() => {
-                this.setState({
-                  highlightRow: rowIndex,
-                  highlightColumn: columnIndex,
-                });
-              }}
+              onSelected={this.props.actions.increase}
             />
           );
         }

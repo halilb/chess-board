@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { Chess } from 'chess.js';
 
-import Board from '../lib/Board';
+import ChessBoard from '../lib';
 
 export default class PlayerVsRandom extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class PlayerVsRandom extends Component {
 
     return (
       <View style={styles.container}>
-        <Board fen={fen} size={340} />
+        <ChessBoard fen={fen} size={340} />
       </View>
     );
   }
