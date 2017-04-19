@@ -4,8 +4,6 @@ import { View, StyleSheet } from 'react-native';
 import Square from './Square';
 import Piece from './Piece';
 
-const DIMENSION = 8;
-
 export default class BoardView extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
@@ -19,14 +17,15 @@ export default class BoardView extends Component {
   };
 
   renderSquares() {
-    const { size, showNotation } = this.props;
-    const squareSize = size / DIMENSION;
+    const { board, size, showNotation } = this.props;
+    const dimension = board.length;
+    const squareSize = size / dimension;
     const rows = [];
 
-    for (let rowIndex = 0; rowIndex < DIMENSION; rowIndex++) {
+    for (let rowIndex = 0; rowIndex < dimension; rowIndex++) {
       const squares = [];
 
-      for (let columnIndex = 0; columnIndex < DIMENSION; columnIndex++) {
+      for (let columnIndex = 0; columnIndex < dimension; columnIndex++) {
         const square = (
           <Square
             key={`square_${rowIndex}_${columnIndex}`}
@@ -34,7 +33,7 @@ export default class BoardView extends Component {
             showNotation={showNotation}
             rowIndex={rowIndex}
             columnIndex={columnIndex}
-            dimension={DIMENSION}
+            dimension={dimension}
           />
         );
         squares.push(square);
@@ -50,7 +49,9 @@ export default class BoardView extends Component {
     return rows;
   }
 
-  renderPieces(board) {
+  renderPieces() {
+    const { size, board } = this.props;
+    const dimension = board.length;
     return board.map((row, rowIndex) => {
       return row.map((piece, columnIndex) => {
         if (piece) {
@@ -60,7 +61,7 @@ export default class BoardView extends Component {
               color={piece.color}
               rowIndex={rowIndex}
               columnIndex={columnIndex}
-              pieceSize={this.props.size / DIMENSION}
+              pieceSize={size / dimension}
             />
           );
         }
@@ -70,12 +71,10 @@ export default class BoardView extends Component {
   }
 
   render() {
-    const { board } = this.props;
-
     return (
       <View style={styles.container}>
         {this.renderSquares()}
-        {this.renderPieces(board)}
+        {this.renderPieces()}
       </View>
     );
   }
