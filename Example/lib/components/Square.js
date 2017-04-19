@@ -1,17 +1,24 @@
 import React, { Component, PropTypes } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 
 export default class Board extends Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
     showNotation: PropTypes.bool,
     rowIndex: PropTypes.number.isRequired,
+    position: PropTypes.string.isRequired,
     columnName: PropTypes.string.isRequired,
     columnIndex: PropTypes.number.isRequired,
     dimension: PropTypes.number.isRequired,
     selected: PropTypes.bool,
     canMoveHere: PropTypes.bool,
     lastMove: PropTypes.bool,
+    onSelected: PropTypes.func.isRequired,
+  };
+
+  onSelected = () => {
+    const { position, onSelected } = this.props;
+    onSelected(position);
   };
 
   renderNotations(isBlack) {
@@ -81,6 +88,7 @@ export default class Board extends Component {
       columnIndex,
       selected,
       lastMove,
+      canMoveHere,
     } = this.props;
     const isBlack = (rowIndex + columnIndex) % 2 === 0;
     let backgroundColor = isBlack ? '#F0D9B5' : '#B58863';
@@ -92,19 +100,24 @@ export default class Board extends Component {
     }
 
     return (
-      <View
-        style={[
-          styles.container,
-          {
-            backgroundColor,
-            width: size,
-            height: size,
-          },
-        ]}
+      <TouchableWithoutFeedback
+        onPress={this.onSelected}
+        disabled={!canMoveHere}
       >
-        {this.renderMoveIndicator()}
-        {this.renderNotations(isBlack)}
-      </View>
+        <View
+          style={[
+            styles.container,
+            {
+              backgroundColor,
+              width: size,
+              height: size,
+            },
+          ]}
+        >
+          {this.renderMoveIndicator()}
+          {this.renderNotations(isBlack)}
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 }

@@ -6,3 +6,7 @@ export const selectPiece = (row, column) => ({
   row,
   column,
 });
+export const movePiece = position => ({
+  type: types.MOVE_PIECE,
+  position,
+});

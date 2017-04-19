@@ -19,7 +19,7 @@ export default class BoardView extends Component {
   };
 
   renderSquares() {
-    const { board, size, showNotation } = this.props;
+    const { actions, board, size, showNotation } = this.props;
     const squareSize = size / DIMENSION;
     const rowSquares = [];
 
@@ -28,6 +28,7 @@ export default class BoardView extends Component {
         rowIndex,
         columnIndex,
         columnName,
+        position,
         selected,
         canMoveHere,
         lastMove,
@@ -41,10 +42,12 @@ export default class BoardView extends Component {
           rowIndex={rowIndex}
           columnIndex={columnIndex}
           columnName={columnName}
+          position={position}
           dimension={DIMENSION}
           selected={selected}
           canMoveHere={canMoveHere}
           lastMove={lastMove}
+          onSelected={actions.movePiece}
         />
       );
 

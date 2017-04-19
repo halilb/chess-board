@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js';
-import { UPDATE_FEN, SELECT_PIECE } from './constants';
+import { UPDATE_FEN, SELECT_PIECE, MOVE_PIECE } from './constants';
 
 const DIMENSION = 8;
 const COLUMN_NAMES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
@@ -19,7 +19,7 @@ function createBoard(game) {
 
       squares.push({
         ...square,
-        name: `${columnName}${DIMENSION - rowIndex}`,
+        position: `${columnName}${DIMENSION - rowIndex}`,
         columnName,
         rowIndex,
         columnIndex,
@@ -33,7 +33,57 @@ function createBoard(game) {
   return squares;
 }
 
-function chess(state = initialState, action) {
+function selectPiece(state, action) {
+  const index = action.row * DIMENSION + action.column;
+  const piece = state.board[index];
+  const possibleMoves = state.game
+    .moves({
+      square: piece.position,
+      verbose: true,
+    })
+    .map(item => item.to);
+
+  const newBoard = state.board.map(square => {
+    // unselect everything
+    if (piece.selected) {
+      return {
+        ...square,
+        selected: false,
+        canMoveHere: false,
+      };
+    }
+
+    const isSelected = square.rowIndex === action.row &&
+      square.columnIndex === action.column;
+    const canMoveHere = possibleMoves.indexOf(square.position) > -1;
+
+    return {
+      ...square,
+      selected: isSelected,
+      canMoveHere,
+    };
+  });
+
+  return {
+    ...state,
+    board: newBoard,
+  };
+}
+
+function movePiece(state, action) {
+  const selectedPiece = state.board.find(item => item.selected);
+  state.game.move({
+    from: selectedPiece.position,
+    to: action.position,
+  });
+
+  return {
+    ...state,
+    board: createBoard(state.game),
+  };
+}
+
+function reducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_FEN: {
       state.game.load(action.fen);
@@ -43,41 +93,15 @@ function chess(state = initialState, action) {
       };
     }
 
-    case SELECT_PIECE: {
-      const index = action.row * DIMENSION + action.column;
-      const piece = state.board[index];
-      const possibleMoves = state.game.moves({ square: piece.name });
+    case SELECT_PIECE:
+      return selectPiece(state, action);
 
-      const newBoard = state.board.map(square => {
-        // unselect everything
-        if (piece.selected) {
-          return {
-            ...square,
-            selected: false,
-            canMoveHere: false,
-          };
-        }
-
-        const isSelected = square.rowIndex === action.row &&
-          square.columnIndex === action.column;
-        const canMoveHere = possibleMoves.indexOf(square.name) > -1;
-
-        return {
-          ...square,
-          selected: isSelected,
-          canMoveHere,
-        };
-      });
-
-      return {
-        ...state,
-        board: newBoard,
-      };
-    }
+    case MOVE_PIECE:
+      return movePiece(state, action);
 
     default:
       return state;
   }
 }
 
-export default chess;
+export default reducer;
