@@ -5,7 +5,6 @@ import BoardView from './BoardView';
 import * as ChessActions from '../state/actions';
 
 const mapStateToProps = state => ({
-  fen: state.fen,
   board: state.board,
 });
 

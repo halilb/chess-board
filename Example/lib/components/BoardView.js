@@ -4,6 +4,8 @@ import { View, StyleSheet } from 'react-native';
 import Square from './Square';
 import Piece from './Piece';
 
+const DIMENSION = 8;
+
 export default class BoardView extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
@@ -18,55 +20,68 @@ export default class BoardView extends Component {
 
   renderSquares() {
     const { board, size, showNotation } = this.props;
-    const dimension = board.length;
-    const squareSize = size / dimension;
-    const rows = [];
+    const squareSize = size / DIMENSION;
+    const rowSquares = [];
 
-    for (let rowIndex = 0; rowIndex < dimension; rowIndex++) {
-      const squares = [];
+    board.forEach(square => {
+      const {
+        rowIndex,
+        columnIndex,
+        columnName,
+        selected,
+        canMoveHere,
+        lastMove,
+      } = square;
 
-      for (let columnIndex = 0; columnIndex < dimension; columnIndex++) {
-        const square = (
-          <Square
-            key={`square_${rowIndex}_${columnIndex}`}
-            size={squareSize}
-            showNotation={showNotation}
-            rowIndex={rowIndex}
-            columnIndex={columnIndex}
-            dimension={dimension}
-          />
-        );
-        squares.push(square);
-      }
-
-      rows.push(
-        <View key={`row_${rowIndex}`} style={styles.row}>
-          {squares}
-        </View>,
+      const squareView = (
+        <Square
+          key={`square_${rowIndex}_${columnIndex}`}
+          size={squareSize}
+          showNotation={showNotation}
+          rowIndex={rowIndex}
+          columnIndex={columnIndex}
+          columnName={columnName}
+          dimension={DIMENSION}
+          selected={selected}
+          canMoveHere={canMoveHere}
+          lastMove={lastMove}
+        />
       );
-    }
 
-    return rows;
+      if (!rowSquares[rowIndex]) {
+        rowSquares[rowIndex] = [];
+      }
+      rowSquares[rowIndex].push(squareView);
+    });
+
+    return rowSquares.map((r, index) => {
+      return (
+        <View key={`row_${index}`} style={styles.row}>
+          {r}
+        </View>
+      );
+    });
   }
 
   renderPieces() {
-    const { size, board } = this.props;
-    const dimension = board.length;
-    return board.map((row, rowIndex) => {
-      return row.map((piece, columnIndex) => {
-        if (piece) {
-          return (
-            <Piece
-              type={piece.type}
-              color={piece.color}
-              rowIndex={rowIndex}
-              columnIndex={columnIndex}
-              pieceSize={size / dimension}
-            />
-          );
-        }
-        return null;
-      });
+    const { actions, size, board } = this.props;
+
+    return board.map(square => {
+      const { type, color, rowIndex, columnIndex } = square;
+      if (type) {
+        return (
+          <Piece
+            key={`piece_${rowIndex}_${columnIndex}`}
+            type={type}
+            color={color}
+            rowIndex={rowIndex}
+            columnIndex={columnIndex}
+            pieceSize={size / DIMENSION}
+            onSelected={actions.selectPiece}
+          />
+        );
+      }
+      return null;
     });
   }
 

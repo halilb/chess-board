@@ -1,16 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const COLUMN_NAMES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-
 export default class Board extends Component {
   static propTypes = {
     size: PropTypes.number.isRequired,
     showNotation: PropTypes.bool,
     rowIndex: PropTypes.number.isRequired,
+    columnName: PropTypes.string.isRequired,
     columnIndex: PropTypes.number.isRequired,
     dimension: PropTypes.number.isRequired,
-    highlighted: PropTypes.bool,
+    selected: PropTypes.bool,
+    canMoveHere: PropTypes.bool,
+    lastMove: PropTypes.bool,
   };
 
   renderNotations(isBlack) {
@@ -18,6 +19,7 @@ export default class Board extends Component {
       showNotation,
       rowIndex,
       columnIndex,
+      columnName,
       dimension,
     } = this.props;
     const notations = [];
@@ -37,7 +39,7 @@ export default class Board extends Component {
             ]}
           >
             {dimension - rowIndex}
-          </Text>
+          </Text>,
         );
       }
 
@@ -54,8 +56,8 @@ export default class Board extends Component {
               },
             ]}
           >
-            {COLUMN_NAMES[columnIndex]}
-          </Text>
+            {columnName}
+          </Text>,
         );
       }
     }
@@ -63,23 +65,44 @@ export default class Board extends Component {
     return notations;
   }
 
+  renderMoveIndicator() {
+    const { canMoveHere } = this.props;
+
+    if (canMoveHere) {
+      return <View style={styles.moveIndicator} />;
+    }
+    return null;
+  }
+
   render() {
-    const { size, rowIndex, columnIndex, highlighted } = this.props;
+    const {
+      size,
+      rowIndex,
+      columnIndex,
+      selected,
+      lastMove,
+    } = this.props;
     const isBlack = (rowIndex + columnIndex) % 2 === 0;
     let backgroundColor = isBlack ? '#F0D9B5' : '#B58863';
 
-    if (highlighted) {
+    if (selected) {
       backgroundColor = '#656E41';
+    } else if (lastMove) {
+      backgroundColor = '#CDD26B';
     }
 
     return (
       <View
-        style={{
-          backgroundColor,
-          width: size,
-          height: size,
-        }}
+        style={[
+          styles.container,
+          {
+            backgroundColor,
+            width: size,
+            height: size,
+          },
+        ]}
       >
+        {this.renderMoveIndicator()}
         {this.renderNotations(isBlack)}
       </View>
     );
@@ -87,9 +110,20 @@ export default class Board extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   notation: {
     position: 'absolute',
     fontSize: 11,
     fontWeight: 'bold',
+  },
+  moveIndicator: {
+    width: 12,
+    height: 12,
+    opacity: 0.3,
+    backgroundColor: '#208530',
+    borderRadius: 6,
   },
 });

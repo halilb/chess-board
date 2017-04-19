@@ -17,6 +17,7 @@
     "import/no-unresolved": 0,
     "import/no-extraneous-dependencies": 0,
     "global-require": 0,
-    "arrow-body-style": 0
+    "arrow-body-style": 0,
+    "no-mixed-operators": 0
   }
 }
