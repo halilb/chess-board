@@ -5,7 +5,8 @@ import BoardView from './BoardView';
 import * as ChessActions from '../state/actions';
 
 const mapStateToProps = state => ({
-  counter: state.counter,
+  fen: state.fen,
+  board: state.board,
 });
 
 const mapDispatchToProps = dispatch => ({

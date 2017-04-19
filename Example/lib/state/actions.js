@@ -1,4 +1,3 @@
 import * as types from './constants';
 
-export const increase = () => ({ type: types.INCREASE });
-export const decrease = () => ({ type: types.DECREASE });
+export const updateFen = fen => ({ type: types.UPDATE_FEN, fen });

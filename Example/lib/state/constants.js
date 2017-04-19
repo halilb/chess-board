@@ -1,2 +1,1 @@
-export const INCREASE = 'INCREASE';
-export const DECREASE = 'DECREASE';
+export const UPDATE_FEN = 'UPDATE_FEN';

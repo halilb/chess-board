@@ -1,22 +1,21 @@
-import { INCREASE, DECREASE } from './constants';
+import { Chess } from 'chess.js';
+import { UPDATE_FEN } from './constants';
+
+const game = new Chess();
 
 const initialState = {
-  counter: 0,
+  board: game.board(),
 };
 
 function chess(state = initialState, action) {
   switch (action.type) {
-    case INCREASE:
+    case UPDATE_FEN: {
+      const newGame = new Chess(action.fen);
       return {
         ...state,
-        counter: state.counter + 1,
+        board: newGame.board(),
       };
-
-    case DECREASE:
-      return {
-        ...state,
-        counter: state.counter - 1,
-      };
+    }
 
     default:
       return state;

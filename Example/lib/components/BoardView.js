@@ -1,8 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import { Chess } from 'chess.js';
-
 import Square from './Square';
 import Piece from './Piece';
 
@@ -12,7 +10,7 @@ export default class BoardView extends Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     size: PropTypes.number.isRequired,
-    fen: PropTypes.string,
+    board: PropTypes.array.isRequired,
     showNotation: PropTypes.bool,
   };
 
@@ -20,32 +18,8 @@ export default class BoardView extends Component {
     showNotation: true,
   };
 
-  constructor(props) {
-    super(props);
-
-    const game = new Chess(props.fen);
-    this.state = {
-      game,
-      board: game.board(),
-      highlightRow: -1,
-      highlightColumn: -1,
-    };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    const nextFen = nextProps.fen;
-    if (this.props.fen !== nextFen) {
-      const game = new Chess(nextFen);
-      this.setState({
-        game,
-        board: game.board(),
-      });
-    }
-  }
-
   renderSquares() {
     const { size, showNotation } = this.props;
-    const { highlightRow, highlightColumn } = this.state;
     const squareSize = size / DIMENSION;
     const rows = [];
 
@@ -61,9 +35,6 @@ export default class BoardView extends Component {
             rowIndex={rowIndex}
             columnIndex={columnIndex}
             dimension={DIMENSION}
-            highlighted={
-              rowIndex === highlightRow && columnIndex === highlightColumn
-            }
           />
         );
         squares.push(square);
@@ -90,7 +61,6 @@ export default class BoardView extends Component {
               rowIndex={rowIndex}
               columnIndex={columnIndex}
               pieceSize={this.props.size / DIMENSION}
-              onSelected={this.props.actions.increase}
             />
           );
         }
@@ -100,7 +70,7 @@ export default class BoardView extends Component {
   }
 
   render() {
-    const { board } = this.state;
+    const { board } = this.props;
 
     return (
       <View style={styles.container}>
