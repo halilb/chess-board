@@ -12,20 +12,23 @@ const initialState = {
 function createBoard(game) {
   const board = game.board();
   const squares = [];
+  const history = game.history({ verbose: true });
+  const lastMove = history[history.length - 1] || {};
 
   board.forEach((row, rowIndex) => {
     row.forEach((square, columnIndex) => {
       const columnName = COLUMN_NAMES[columnIndex];
+      const position = `${columnName}${DIMENSION - rowIndex}`;
 
       squares.push({
         ...square,
-        position: `${columnName}${DIMENSION - rowIndex}`,
+        position,
         columnName,
         rowIndex,
         columnIndex,
         selected: false,
         canMoveHere: false,
-        lastMove: false,
+        lastMove: position === lastMove.to || position === lastMove.from,
       });
     });
   });
