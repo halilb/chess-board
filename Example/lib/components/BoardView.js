@@ -32,6 +32,7 @@ export default class BoardView extends Component {
         selected,
         canMoveHere,
         lastMove,
+        inCheck,
       } = square;
 
       const squareView = (
@@ -47,6 +48,7 @@ export default class BoardView extends Component {
           canMoveHere={canMoveHere}
           position={position}
           lastMove={lastMove}
+          inCheck={inCheck}
           onSelected={actions.movePiece}
         />
       );

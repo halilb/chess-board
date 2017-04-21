@@ -13,6 +13,7 @@ export default class Board extends Component {
     selected: PropTypes.bool,
     canMoveHere: PropTypes.bool,
     lastMove: PropTypes.bool,
+    inCheck: PropTypes.bool,
     onSelected: PropTypes.func.isRequired,
   };
 
@@ -88,6 +89,7 @@ export default class Board extends Component {
       columnIndex,
       selected,
       lastMove,
+      inCheck,
       canMoveHere,
     } = this.props;
     const isBlack = (rowIndex + columnIndex) % 2 === 0;
@@ -97,6 +99,8 @@ export default class Board extends Component {
       backgroundColor = '#656E41';
     } else if (lastMove) {
       backgroundColor = '#CDD26B';
+    } else if (inCheck) {
+      backgroundColor = '#C51B16';
     }
 
     return (
