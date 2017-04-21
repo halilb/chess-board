@@ -32,6 +32,7 @@ export default class Piece extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     color: PropTypes.string.isRequired,
+    position: PropTypes.string.isRequired,
     rowIndex: PropTypes.number.isRequired,
     columnIndex: PropTypes.number.isRequired,
     pieceSize: PropTypes.number.isRequired,
@@ -39,8 +40,8 @@ export default class Piece extends Component {
   };
 
   onSelected = () => {
-    const { rowIndex, columnIndex, onSelected } = this.props;
-    onSelected(rowIndex, columnIndex);
+    const { rowIndex, columnIndex, onSelected, position } = this.props;
+    onSelected(rowIndex, columnIndex, position);
   };
 
   render() {
@@ -50,7 +51,6 @@ export default class Piece extends Component {
       rowIndex,
       columnIndex,
       pieceSize,
-      onSelected,
     } = this.props;
     const pieceImageSource = PIECE_IMAGES[type][color];
 

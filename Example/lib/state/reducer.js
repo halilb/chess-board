@@ -34,16 +34,28 @@ function createBoard(game) {
 }
 
 function selectPiece(state, action) {
+  const { board, game } = state;
   const index = action.row * DIMENSION + action.column;
-  const piece = state.board[index];
-  const possibleMoves = state.game
+  const piece = board[index];
+
+  // remove the piece
+  if (piece.canMoveHere) {
+    return movePiece(state, action);
+  }
+
+  // do not select if it's not your turn
+  if (game.turn() !== piece.color) {
+    return state;
+  }
+
+  const possibleMoves = game
     .moves({
       square: piece.position,
       verbose: true,
     })
     .map(item => item.to);
 
-  const newBoard = state.board.map(square => {
+  const newBoard = board.map(square => {
     // unselect everything
     if (piece.selected) {
       return {
@@ -83,7 +95,7 @@ function movePiece(state, action) {
   };
 }
 
-function reducer(state = initialState, action) {
+function ChessReducer(state = initialState, action) {
   switch (action.type) {
     case UPDATE_FEN: {
       state.game.load(action.fen);
@@ -104,4 +116,4 @@ function reducer(state = initialState, action) {
   }
 }
 
-export default reducer;
+export default ChessReducer;

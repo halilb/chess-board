@@ -7,6 +7,7 @@ import BoardViewContainer from './components/BoardViewContainer';
 import { updateFen } from './state/actions';
 
 const store = createStore(ChessReducer);
+console.disableYellowBox = true;
 
 export default class App extends Component {
   static propTypes = {

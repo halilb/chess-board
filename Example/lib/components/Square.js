@@ -133,10 +133,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   moveIndicator: {
-    width: 12,
-    height: 12,
+    width: 24,
+    height: 24,
     opacity: 0.3,
     backgroundColor: '#208530',
-    borderRadius: 6,
+    borderRadius: 12,
   },
 });

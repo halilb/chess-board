@@ -42,10 +42,10 @@ export default class BoardView extends Component {
           rowIndex={rowIndex}
           columnIndex={columnIndex}
           columnName={columnName}
-          position={position}
           dimension={DIMENSION}
           selected={selected}
           canMoveHere={canMoveHere}
+          position={position}
           lastMove={lastMove}
           onSelected={actions.movePiece}
         />
@@ -70,7 +70,13 @@ export default class BoardView extends Component {
     const { actions, size, board } = this.props;
 
     return board.map(square => {
-      const { type, color, rowIndex, columnIndex } = square;
+      const {
+        type,
+        color,
+        rowIndex,
+        columnIndex,
+        position,
+      } = square;
       if (type) {
         return (
           <Piece
@@ -80,6 +86,7 @@ export default class BoardView extends Component {
             rowIndex={rowIndex}
             columnIndex={columnIndex}
             pieceSize={size / DIMENSION}
+            position={position}
             onSelected={actions.selectPiece}
           />
         );
