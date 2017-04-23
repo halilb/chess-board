@@ -14,10 +14,14 @@ export default class BoardView extends Component {
     fen: PropTypes.string,
     size: PropTypes.number.isRequired,
     showNotation: PropTypes.bool,
+    shouldSelectPiece: PropTypes.func,
+    onMove: PropTypes.func,
   };
 
   static defaultProps = {
     showNotation: true,
+    shouldSelectPiece: () => true,
+    onMove: () => {},
   };
 
   constructor(props) {
@@ -40,14 +44,17 @@ export default class BoardView extends Component {
     }
   }
 
-  movePiece = newPosition => {
+  movePiece = (to, from) => {
+    const { onMove } = this.props;
     const { game, board } = this.state;
     const selectedPiece = board.find(item => item.selected);
+    const moveConfig = {
+      to,
+      from: from || selectedPiece.position,
+    };
 
-    game.move({
-      from: selectedPiece.position,
-      to: newPosition,
-    });
+    game.move(moveConfig);
+    onMove(moveConfig);
 
     this.setState({
       board: this.createBoardData(game),
@@ -55,6 +62,7 @@ export default class BoardView extends Component {
   };
 
   selectPiece = (row, column, position) => {
+    const { shouldSelectPiece } = this.props;
     const { board, game } = this.state;
     const index = row * DIMENSION + column;
     const piece = board[index];
@@ -65,8 +73,8 @@ export default class BoardView extends Component {
       return;
     }
 
-    // do not select if it's not your turn
-    if (game.turn() !== piece.color) {
+    // do nothing if piece shouldn't be selected
+    if (!shouldSelectPiece(piece)) {
       return;
     }
 

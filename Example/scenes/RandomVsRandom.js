@@ -18,9 +18,13 @@ export default class RandomVsRandom extends Component {
     setTimeout(this.makeRandomMove, 500);
   }
 
+  shouldSelectPiece() {
+    return false;
+  }
+
   makeRandomMove = () => {
     const { game } = this.state;
-    const possibleMoves = game.moves();
+    const possibleMoves = game.moves({ verbose: true });
 
     // exit if the game is over
     if (
@@ -32,10 +36,9 @@ export default class RandomVsRandom extends Component {
     }
 
     const randomIndex = Math.floor(Math.random() * possibleMoves.length);
-    game.move(possibleMoves[randomIndex]);
-    this.setState({
-      fen: game.fen(),
-    });
+    const randomMove = possibleMoves[randomIndex];
+    game.move(randomMove);
+    this.board.movePiece(randomMove.to, randomMove.from);
 
     setTimeout(this.makeRandomMove, 500);
   };
@@ -45,7 +48,12 @@ export default class RandomVsRandom extends Component {
 
     return (
       <View style={styles.container}>
-        <ChessBoard fen={fen} size={340} />
+        <ChessBoard
+          ref={board => this.board = board}
+          fen={fen}
+          size={340}
+          shouldSelectPiece={this.shouldSelectPiece}
+        />
       </View>
     );
   }
