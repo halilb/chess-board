@@ -8,13 +8,18 @@ import {
   View,
 } from 'react-native';
 
-import { PlayerVsRandom, RandomVsRandom } from './scenes';
+import { PlayerVsRandom, PlayerVsLichessAI, RandomVsRandom } from './scenes';
 
 const EXAMPLES = [
   {
     title: 'Player vs Random',
     component: PlayerVsRandom,
     description: 'Play vs Random computer moves',
+  },
+  {
+    title: 'Player vs Lichess AI',
+    component: PlayerVsLichessAI,
+    description: 'Play vs Lichess StockFish AI',
   },
   {
     title: 'Random vs Random',
