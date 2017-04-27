@@ -11,29 +11,34 @@ export default class PlayerVsRandom extends Component {
 
     this.state = {
       game: new Chess(),
+      userColor: 'b',
     };
   }
 
+  componentDidMount() {
+    setTimeout(this.makeRandomMove, 500);
+  }
+
   onMove = ({ from, to }) => {
-    const { game } = this.state;
+    const { game, userColor } = this.state;
     game.move({
       from,
       to,
     });
 
-    if (game.turn() === 'b') {
+    if (game.turn() !== userColor) {
       setTimeout(this.makeRandomMove, 500);
     }
   };
 
   shouldSelectPiece = piece => {
-    const { game } = this.state;
+    const { game, userColor } = this.state;
     const turn = game.turn();
     if (
       game.in_checkmate() === true ||
       game.in_draw() === true ||
-      turn !== 'w' ||
-      piece.color !== 'w'
+      turn !== userColor ||
+      piece.color !== userColor
     ) {
       return false;
     }
@@ -60,13 +65,14 @@ export default class PlayerVsRandom extends Component {
   };
 
   render() {
-    const { fen } = this.state;
+    const { fen, userColor } = this.state;
 
     return (
       <View style={styles.container}>
         <ChessBoard
           ref={board => this.board = board}
           fen={fen}
+          color={userColor}
           size={340}
           shouldSelectPiece={this.shouldSelectPiece}
           onMove={this.onMove}

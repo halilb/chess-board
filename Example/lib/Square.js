@@ -14,6 +14,7 @@ export default class Board extends Component {
     canMoveHere: PropTypes.bool,
     lastMove: PropTypes.bool,
     inCheck: PropTypes.bool,
+    reverseBoard: PropTypes.bool,
     onSelected: PropTypes.func.isRequired,
   };
 
@@ -29,8 +30,14 @@ export default class Board extends Component {
       columnIndex,
       columnName,
       dimension,
+      reverseBoard,
     } = this.props;
     const notations = [];
+    const transform = [
+      {
+        rotate: reverseBoard ? '180deg' : '0deg',
+      },
+    ];
 
     if (showNotation) {
       if (columnIndex + 1 === dimension) {
@@ -43,6 +50,7 @@ export default class Board extends Component {
                 color: isBlack ? '#B58863' : '#F0D9B5',
                 top: 0,
                 right: 0,
+                transform,
               },
             ]}
           >
@@ -61,6 +69,7 @@ export default class Board extends Component {
                 color: isBlack ? '#B58863' : '#F0D9B5',
                 bottom: 0,
                 left: 0,
+                transform,
               },
             ]}
           >

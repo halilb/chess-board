@@ -14,12 +14,14 @@ export default class BoardView extends Component {
     fen: PropTypes.string,
     size: PropTypes.number.isRequired,
     showNotation: PropTypes.bool,
+    color: PropTypes.oneOf(['w', 'b']),
     shouldSelectPiece: PropTypes.func,
     onMove: PropTypes.func,
   };
 
   static defaultProps = {
     showNotation: true,
+    color: 'w',
     shouldSelectPiece: () => true,
     onMove: () => {},
   };
@@ -61,11 +63,10 @@ export default class BoardView extends Component {
     });
   };
 
-  selectPiece = (row, column, position) => {
+  selectPiece = position => {
     const { shouldSelectPiece } = this.props;
     const { board, game } = this.state;
-    const index = row * DIMENSION + column;
-    const piece = board[index];
+    const piece = board.find(b => b.position === position);
 
     // remove the piece
     if (piece.canMoveHere) {
@@ -95,8 +96,7 @@ export default class BoardView extends Component {
         };
       }
 
-      const isSelected = square.rowIndex === row &&
-        square.columnIndex === column;
+      const isSelected = square.position === position;
       const canMoveHere = possibleMoves.indexOf(square.position) > -1;
 
       return {
@@ -147,7 +147,7 @@ export default class BoardView extends Component {
     return squares;
   }
 
-  renderSquares() {
+  renderSquares(reverseBoard) {
     const { size, showNotation } = this.props;
     const { board } = this.state;
     const squareSize = size / DIMENSION;
@@ -179,6 +179,7 @@ export default class BoardView extends Component {
           position={position}
           lastMove={lastMove}
           inCheck={inCheck}
+          reverseBoard={reverseBoard}
           onSelected={this.movePiece}
         />
       );
@@ -198,7 +199,7 @@ export default class BoardView extends Component {
     });
   }
 
-  renderPieces() {
+  renderPieces(reverseBoard) {
     const { size } = this.props;
     const { board } = this.state;
 
@@ -220,6 +221,7 @@ export default class BoardView extends Component {
             columnIndex={columnIndex}
             pieceSize={size / DIMENSION}
             position={position}
+            reverseBoard={reverseBoard}
             onSelected={this.selectPiece}
           />
         );
@@ -229,10 +231,23 @@ export default class BoardView extends Component {
   }
 
   render() {
+    const reverseBoard = this.props.color === 'b';
+
     return (
-      <View style={styles.container}>
-        {this.renderSquares()}
-        {this.renderPieces()}
+      <View
+        style={[
+          styles.container,
+          {
+            transform: [
+              {
+                rotate: reverseBoard ? '180deg' : '0deg',
+              },
+            ],
+          },
+        ]}
+      >
+        {this.renderSquares(reverseBoard)}
+        {this.renderPieces(reverseBoard)}
       </View>
     );
   }

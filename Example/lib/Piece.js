@@ -36,12 +36,13 @@ export default class Piece extends Component {
     rowIndex: PropTypes.number.isRequired,
     columnIndex: PropTypes.number.isRequired,
     pieceSize: PropTypes.number.isRequired,
+    reverseBoard: PropTypes.bool,
     onSelected: PropTypes.func.isRequired,
   };
 
   onSelected = () => {
-    const { rowIndex, columnIndex, onSelected, position } = this.props;
-    onSelected(rowIndex, columnIndex, position);
+    const { position, onSelected } = this.props;
+    onSelected(position);
   };
 
   render() {
@@ -51,6 +52,7 @@ export default class Piece extends Component {
       rowIndex,
       columnIndex,
       pieceSize,
+      reverseBoard,
     } = this.props;
     const pieceImageSource = PIECE_IMAGES[type][color];
 
@@ -63,6 +65,11 @@ export default class Piece extends Component {
             left: pieceSize * columnIndex,
             width: pieceSize,
             height: pieceSize,
+            transform: [
+              {
+                rotate: reverseBoard ? '180deg' : '0deg',
+              },
+            ],
           }}
           source={pieceImageSource}
         />
