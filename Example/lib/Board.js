@@ -17,6 +17,7 @@ export default class BoardView extends Component {
     color: PropTypes.oneOf(['w', 'b']),
     shouldSelectPiece: PropTypes.func,
     onMove: PropTypes.func,
+    style: View.propTypes.style,
   };
 
   static defaultProps = {
@@ -58,6 +59,14 @@ export default class BoardView extends Component {
     game.move(moveConfig);
     onMove(moveConfig);
 
+    this.setState({
+      board: this.createBoardData(game),
+    });
+  };
+
+  undo = () => {
+    const { game } = this.state;
+    game.undo();
     this.setState({
       board: this.createBoardData(game),
     });
@@ -231,23 +240,23 @@ export default class BoardView extends Component {
   }
 
   render() {
-    const reverseBoard = this.props.color === 'b';
+    const { color, style } = this.props;
+    const reverseBoard = color === 'b';
 
     return (
-      <View
-        style={[
-          styles.container,
-          {
+      <View style={[styles.container, style]}>
+        <View
+          style={{
             transform: [
               {
                 rotate: reverseBoard ? '180deg' : '0deg',
               },
             ],
-          },
-        ]}
-      >
-        {this.renderSquares(reverseBoard)}
-        {this.renderPieces(reverseBoard)}
+          }}
+        >
+          {this.renderSquares(reverseBoard)}
+          {this.renderPieces(reverseBoard)}
+        </View>
       </View>
     );
   }

@@ -12,6 +12,7 @@ import {
   PlayerVsRandom,
   PlayerVsLichessAI,
   PlayerVsPlayer,
+  ChessTraining,
   RandomVsRandom,
 } from './scenes';
 
@@ -30,6 +31,11 @@ const EXAMPLES = [
     title: 'Player vs Lichess Player',
     component: PlayerVsPlayer,
     description: 'Play against Lichess friend',
+  },
+  {
+    title: 'Chess Training',
+    component: ChessTraining,
+    description: 'Solve a Lichess puzzle',
   },
   {
     title: 'Random vs Random',
